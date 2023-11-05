@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 
-export default async (filePath, endBytes = null, linesPerRequest = 50) => {
+export default async (filePath, endBytes = null, linesPerRequest = 100) => {
 	endBytes = parseInt(endBytes);
 	linesPerRequest = parseInt(linesPerRequest);
 
