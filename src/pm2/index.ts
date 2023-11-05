@@ -34,12 +34,22 @@ const info = async (id) => {
 			name: services[0].name,
 			status: services[0].pm2_env.status,
 			cpu: services[0].monit.cpu,
-			memory: bytesToSize(services[0].monit.memory),
-			uptime: timeSince(services[0].pm2_env.pm_uptime),
-			pm_id: services[0].pm_id,
-			pm_out_log_path: services[0].pm2_env.pm_out_log_path,
-			pm_err_log_path: services[0].pm2_env.pm_err_log_path,
-			pm2_env_cwd: services[0].pm2_env.pm_cwd,
+			memory: {
+				raw: services[0].monit.memory,
+				formatted: bytesToSize(services[0].monit.memory),
+			},
+			uptime: {
+				raw: services[0].pm2_env.pm_uptime,
+				formatted: timeSince(services[0].pm2_env.pm_uptime),
+			},
+			pm2: {
+				id: services[0].pm_id,
+				cwd: services[0].pm2_env.pm_cwd,
+				log: {
+					out: services[0].pm2_env.pm_out_log_path,
+					err: services[0].pm2_env.pm_err_log_path,
+				},
+			},
 		};
 		return service;
 	}
@@ -54,4 +64,5 @@ const action = async (command, id) => {
 	}
 };
 
+export { default as logs } from './logs';
 export default { list, info, action };

@@ -5,17 +5,17 @@ const bytesToSize = (bytes, precision) => {
 	var terabyte = gigabyte * 1024;
 
 	if (bytes >= 0 && bytes < kilobyte) {
-		return bytes + 'b ';
+		return bytes + 'b';
 	} else if (bytes >= kilobyte && bytes < megabyte) {
-		return (bytes / kilobyte).toFixed(precision) + 'kb ';
+		return (bytes / kilobyte).toFixed(precision) + 'kb';
 	} else if (bytes >= megabyte && bytes < gigabyte) {
-		return (bytes / megabyte).toFixed(precision) + 'mb ';
+		return (bytes / megabyte).toFixed(precision) + 'mb';
 	} else if (bytes >= gigabyte && bytes < terabyte) {
-		return (bytes / gigabyte).toFixed(precision) + 'gb ';
+		return (bytes / gigabyte).toFixed(precision) + 'gb';
 	} else if (bytes >= terabyte) {
-		return (bytes / terabyte).toFixed(precision) + 'tb ';
+		return (bytes / terabyte).toFixed(precision) + 'tb';
 	} else {
-		return bytes + 'b ';
+		return bytes + 'b';
 	}
 };
 
