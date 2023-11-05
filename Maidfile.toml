@@ -1,3 +1,7 @@
 [project]
 name = "ecosystem"
 version = "0.1.0"
+
+[tasks]
+install_daemon = { path = "pkg/services/daemon", script = "bun install" }
+run_daemon = { path = "pkg/services/daemon", script = "bun run src/api.ts" }

@@ -1,5 +1,8 @@
 # Based on https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore
 
+# Maid
+.maid
+
 # Logs
 
 logs
@@ -147,6 +150,9 @@ dist
 # FuseBox cache
 
 .fusebox/
+
+# testing
+tests
 
 # DynamoDB Local files
 

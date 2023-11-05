@@ -12,8 +12,5 @@
 	"dependencies": {
 		"hono": "^3.9.2",
 		"pm2": "^5.3.0"
-	},
-	"scripts": {
-		"start": "bun run src/api.ts"
 	}
 }
