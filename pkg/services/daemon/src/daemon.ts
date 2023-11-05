@@ -1,10 +1,20 @@
+import log from './logger';
 import { Hono } from 'hono';
 import pm2, { logs } from './pm2';
+import { logger } from './middleware';
+import { bearerAuth } from 'hono/bearer-auth';
 
-const port = 9001;
 const app = new Hono();
 
-app.get('/', (c) => c.text('healthy'));
+/* read from config.toml */
+const token = 'test_token';
+const port = 9001;
+
+app.use('/api/*', bearerAuth({ token }));
+app.use('*', logger());
+
+/* routes */
+app.get('/health', (c) => c.text('healthy'));
 app.get('/list', (c) => pm2.list().then((json) => c.json(json)));
 app.get('/info/:id', (c) => pm2.info(c.req.param('id')).then((json) => c.json(json)));
 app.get('/action/:name/:id', (c) => pm2.action(c.req.param('name'), c.req.param('id')).then((json) => c.json(json)));
@@ -18,8 +28,7 @@ app.get('/logs/:id', (c) => {
 	});
 });
 
-console.log('started on port', port);
-
+log.g('startup').success('running on port:', port);
 export default {
 	port: port,
 	fetch: app.fetch,

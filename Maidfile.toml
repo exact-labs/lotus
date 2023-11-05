@@ -3,5 +3,6 @@ name = "ecosystem"
 version = "0.1.0"
 
 [tasks]
+# todo: add monorepo support
 install_daemon = { path = "pkg/services/daemon", script = "bun install" }
-run_daemon = { path = "pkg/services/daemon", script = "bun run src/api.ts" }
+run_daemon = { path = "pkg/services/daemon", script = "bun run src/daemon.ts" }

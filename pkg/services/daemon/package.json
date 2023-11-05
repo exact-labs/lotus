@@ -1,7 +1,7 @@
 {
 	"name": "ecosystem-daemon",
 	"version": "0.1.0",
-	"module": "src/api.ts",
+	"module": "src/daemon.ts",
 	"type": "module",
 	"devDependencies": {
 		"bun-types": "latest"
@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"hono": "^3.9.2",
+		"log4you": "^0.3.2",
 		"pm2": "^5.3.0"
 	}
 }
