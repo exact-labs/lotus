@@ -5,5 +5,4 @@ version = "0.1.0"
 [tasks]
 # add maid task groups
 run_daemon = { path = "services/daemon", script = "bun run src/daemon.ts" }
-run_frontend = { path = "apps/frontend", script = "bunx vite" }
-add_component = { path = "apps/frontend", script = "bunx shadcn-ui@latest add %{arg.1}" }
+run_frontend = { path = "apps/frontend", script = "bunx vite --clearScreen false" }

@@ -65,6 +65,7 @@ const actions = {
 			},
 			pm2: {
 				id: service.pm_id,
+				uuid: service.pm2_env.unique_id,
 				cwd: service.pm2_env.pm_cwd,
 				log: {
 					out: service.pm2_env.pm_out_log_path,
