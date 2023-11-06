@@ -1,3 +1,6 @@
+import pm2 from 'pm2';
+import log from '../logger';
+
 const bytesToSize = (bytes, precision) => {
 	var kilobyte = 1024;
 	var megabyte = kilobyte * 1024;
@@ -46,4 +49,43 @@ const timeSince = (date) => {
 	return Math.floor(seconds) + ' seconds';
 };
 
-export { bytesToSize, timeSince };
+const actions = {
+	cmd: (name, ...args) => new Promise((resolve, reject) => pm2[name](...args, (err, result) => (err ? reject(err) : resolve(result)))),
+	execute: async (operation, ...args) => {
+		await actions.cmd('connect');
+		log.g('pm2').trace('connected to api');
+
+		const result = await actions.cmd(operation, ...args);
+		log.g('pm2').trace(`action [${operation}] executed`);
+
+		await actions.cmd('disconnect');
+		log.g('pm2').trace('disconnected from api');
+
+		return result;
+	},
+	info: (service) => {
+		return {
+			name: service.name,
+			status: service.pm2_env.status,
+			cpu: service.monit.cpu,
+			memory: {
+				raw: service.monit.memory,
+				formatted: bytesToSize(service.monit.memory),
+			},
+			uptime: {
+				raw: service.pm2_env.pm_uptime,
+				formatted: timeSince(service.pm2_env.pm_uptime),
+			},
+			pm2: {
+				id: service.pm_id,
+				cwd: service.pm2_env.pm_cwd,
+				log: {
+					out: service.pm2_env.pm_out_log_path,
+					err: service.pm2_env.pm_err_log_path,
+				},
+			},
+		};
+	},
+};
+
+export { bytesToSize, timeSince, actions };

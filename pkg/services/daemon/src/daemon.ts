@@ -10,21 +10,22 @@ const app = new Hono();
 const token = 'test_token';
 const port = 9001;
 
-app.use('/api/*', bearerAuth({ token }));
+app.use('/d/*', bearerAuth({ token }));
 app.use('*', logger());
 
 /* routes */
-app.get('/health', (c) => c.text('healthy'));
-app.get('/list', (c) => pm2.list().then((json) => c.json(json)));
-app.get('/info/:id', (c) => pm2.info(c.req.param('id')).then((json) => c.json(json)));
-app.get('/action/:name/:id', (c) => pm2.action(c.req.param('name'), c.req.param('id')).then((json) => c.json(json)));
+app.get('/', (ctx) => ctx.redirect('/health'));
+app.get('/health', (ctx) => ctx.json({ healthly: true }));
+app.get('/d/list', (hono) => pm2.list(hono));
+app.get('/d/info/:id', (hono) => pm2.info(hono));
+app.get('/d/action/:cmd/:id', (hono) => pm2.action(hono));
 
-app.get('/logs/:id', (c) => {
-	const id = c.req.param('id');
-	const type = c.req.query('type');
+app.get('/d/logs/:id', (hono) => {
+	const id = hono.req.param('id');
+	const type = hono.req.query('type');
 
-	return pm2.info(id).then((json) => {
-		return logs(type == 'error' ? json.pm2.log.err : json.pm2.log.out).then((data) => c.json(data));
+	return pm2.raw(id).then((json) => {
+		return logs(type == 'error' ? json.pm2.log.err : json.pm2.log.out).then((data) => hono.json(data));
 	});
 });
 
