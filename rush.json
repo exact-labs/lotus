@@ -1,0 +1,33 @@
+{
+	"$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
+	"rushVersion": "5.110.1",
+	"pnpmVersion": "8.10.2",
+	"suppressNodeLtsWarning": true,
+	"gitPolicy": {},
+	"repository": {
+		"url": "https://lab.themackabu.dev/self/vendor",
+		"defaultBranch": "master",
+		"defaultRemote": "origin"
+	},
+	"eventHooks": {
+		"preRushInstall": [],
+		"postRushInstall": [],
+		"preRushBuild": [],
+		"postRushBuild": []
+	},
+	"variants": [],
+	"projects": [
+		{
+			"packageName": "@ecosystem/frontend",
+			"projectFolder": "apps/frontend"
+		},
+		{
+			"packageName": "@ecosystem/backend",
+			"projectFolder": "services/backend"
+		},
+		{
+			"packageName": "@ecosystem/daemon",
+			"projectFolder": "services/daemon"
+		}
+	]
+}
