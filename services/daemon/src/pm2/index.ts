@@ -5,13 +5,18 @@ const list = async (hono) => {
 
 	return hono.json(
 		services.map((service) => ({
+			id: service.pm_id,
 			name: service.name,
 			status: service.pm2_env.status,
 			cpu: service.monit.cpu,
-			log_stdout: service.pm2_env.pm_out_log_path,
-			memory: bytesToSize(service.monit.memory),
-			uptime: timeSince(service.pm2_env.pm_uptime),
-			pm_id: service.pm_id,
+			memory: {
+				raw: service.monit.memory,
+				formatted: bytesToSize(service.monit.memory),
+			},
+			uptime: {
+				raw: service.pm2_env.pm_uptime,
+				formatted: timeSince(service.pm2_env.pm_uptime),
+			},
 		}))
 	);
 };

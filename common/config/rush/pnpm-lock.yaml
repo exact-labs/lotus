@@ -17,6 +17,9 @@ importers:
       hono:
         specifier: ~3.9.2
         version: 3.9.2
+      log4you:
+        specifier: ~0.3.2
+        version: 0.3.2
       pm2:
         specifier: ~5.3.0
         version: 5.3.0
@@ -630,6 +633,10 @@ packages:
   /log-driver@1.2.7:
     resolution: {integrity: sha512-U7KCmLdqsGHBLeWqYlFA0V0Sl6P08EE1ZrmA9cxjUE0WVqT9qnyVDPz1kzpFEP0jdJuFnasWIfSd7fsaNXkpbg==}
     engines: {node: '>=0.8.6'}
+    dev: false
+
+  /log4you@0.3.2:
+    resolution: {integrity: sha512-LuxJpDoEDt8h3oYkX+oai5EhgWuh/TU8kjEQ+kRdaVyc8o2b6x2Sw3w8ohpnXHsmDXDFo2jAhY/Fpr6C2OwN4g==}
     dev: false
 
   /lru-cache@6.0.0:

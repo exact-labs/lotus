@@ -2,51 +2,38 @@ import pm2 from 'pm2';
 import log from '../logger';
 
 const bytesToSize = (bytes, precision) => {
-	var kilobyte = 1024;
-	var megabyte = kilobyte * 1024;
-	var gigabyte = megabyte * 1024;
-	var terabyte = gigabyte * 1024;
+	if (isNaN(bytes) || bytes === 0) return '0b';
 
-	if (bytes >= 0 && bytes < kilobyte) {
-		return bytes + 'b';
-	} else if (bytes >= kilobyte && bytes < megabyte) {
-		return (bytes / kilobyte).toFixed(precision) + 'kb';
-	} else if (bytes >= megabyte && bytes < gigabyte) {
-		return (bytes / megabyte).toFixed(precision) + 'mb';
-	} else if (bytes >= gigabyte && bytes < terabyte) {
-		return (bytes / gigabyte).toFixed(precision) + 'gb';
-	} else if (bytes >= terabyte) {
-		return (bytes / terabyte).toFixed(precision) + 'tb';
-	} else {
-		return bytes + 'b';
-	}
+	const sizes = ['b', 'kb', 'mb', 'gb', 'tb'];
+	const kilobyte = 1024;
+
+	const index = Math.floor(Math.log(bytes) / Math.log(kilobyte));
+	const size = (bytes / Math.pow(kilobyte, index)).toFixed(precision);
+	return size + sizes[index];
 };
 
 const timeSince = (date) => {
-	var seconds = Math.floor((new Date() - date) / 1000);
+	const now = new Date();
+	const elapsedMilliseconds = now - date;
 
-	var interval = Math.floor(seconds / 31536000);
+	const timeUnits = [
+		{ unit: 'year', seconds: 31536000 },
+		{ unit: 'month', seconds: 2592000 },
+		{ unit: 'day', seconds: 86400 },
+		{ unit: 'hour', seconds: 3600 },
+		{ unit: 'minute', seconds: 60 },
+		{ unit: 'second', seconds: 1 },
+	];
 
-	if (interval > 1) {
-		return interval + ' yrs';
+	for (const { unit, seconds } of timeUnits) {
+		const interval = Math.floor(elapsedMilliseconds / 1000 / seconds);
+
+		if (interval >= 1) {
+			return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+		}
 	}
-	interval = Math.floor(seconds / 2592000);
-	if (interval > 1) {
-		return interval + ' months';
-	}
-	interval = Math.floor(seconds / 86400);
-	if (interval > 1) {
-		return interval + ' days';
-	}
-	interval = Math.floor(seconds / 3600);
-	if (interval > 1) {
-		return interval + ' hrs';
-	}
-	interval = Math.floor(seconds / 60);
-	if (interval > 1) {
-		return interval + ' minutes';
-	}
-	return Math.floor(seconds) + ' seconds';
+
+	return 'just now';
 };
 
 const actions = {
