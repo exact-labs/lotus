@@ -74,3 +74,6 @@ common/autoinstallers/*/.npmrc
 
 # Maid
 .maid
+
+# vite
+dist

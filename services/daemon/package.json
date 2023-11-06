@@ -1,11 +1,15 @@
 {
 	"name": "@ecosystem/daemon",
 	"version": "0.1.0",
+	"license": "MIT",
 	"module": "src/daemon.ts",
 	"type": "module",
+	"scripts": {
+		"build": "echo none"
+	},
 	"dependencies": {
-	  "hono": "~3.9.2",
-	  "pm2": "~5.3.0",
-	  "log4you": "~0.3.2"
+		"hono": "~3.9.2",
+		"pm2": "~5.3.0",
+		"log4you": "~0.3.2"
 	}
 }
