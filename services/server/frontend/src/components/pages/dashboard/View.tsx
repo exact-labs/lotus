@@ -18,7 +18,6 @@ import {
 
 import Downshift from 'downshift';
 import { matchSorter } from 'match-sorter';
-import daemon from '@/daemon';
 
 const stats = [
 	{ name: 'Status', value: 'online' },
@@ -256,10 +255,6 @@ const LogViewer = () => {
 
 const View = () => {
 	const { id } = useParams();
-
-	useEffect(() => {
-		daemon.logs.out().then((data) => console.log(data));
-	}, []);
 
 	return (
 		<Fragment>

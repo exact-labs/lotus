@@ -3,6 +3,7 @@
 	"rushVersion": "5.110.1",
 	"pnpmVersion": "8.10.2",
 	"suppressNodeLtsWarning": true,
+	"projectFolderMaxDepth": 3,
 	"gitPolicy": {},
 	"repository": {
 		"url": "https://lab.themackabu.dev/self/vendor",
@@ -18,12 +19,12 @@
 	"variants": [],
 	"projects": [
 		{
-			"packageName": "@ecosystem/frontend",
-			"projectFolder": "services/frontend"
+			"packageName": "@ecosystem/server",
+			"projectFolder": "services/server"
 		},
 		{
-			"packageName": "@ecosystem/backend",
-			"projectFolder": "services/backend"
+			"packageName": "@ecosystem/frontend",
+			"projectFolder": "services/server/frontend"
 		},
 		{
 			"packageName": "@ecosystem/daemon",

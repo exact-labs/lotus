@@ -1,0 +1,16 @@
+{
+	"name": "@ecosystem/server",
+	"version": "0.1.0",
+	"license": "MIT",
+	"module": "backend/server.ts",
+	"type": "module",
+	"scripts": {
+		"build": "echo none"
+	},
+	"dependencies": {
+		"hono": "~3.9.2",
+		"log4you": "~0.3.2",
+		"@prisma/client": "~5.5.2",
+		"prisma": "~5.5.2"
+	}
+}

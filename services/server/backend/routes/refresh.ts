@@ -2,25 +2,13 @@ import { Context } from 'hono';
 import { PrismaClient } from '@prisma/client';
 import { setCookie } from 'hono/cookie';
 import { sign } from 'hono/jwt';
-import { HttpError } from '../utils';
 
 /* read from config.toml */
 const secret = 'it-is-very-secret';
 
-const login = async (hono: Context) => {
-	const prisma = new PrismaClient({
-		// read from config, use dockerfile to run mongodb
-		datasources: { db: { url: 'file:./dev.db' } },
-	});
-
-	const { username, password } = await hono.req.json();
-	const user = await prisma.users.findUnique({ where: { username } });
-
-	if (!user || !(await Bun.password.verify(password, user.hash))) {
-		return hono.json({ error: !user ? 'invalid username' : 'invalid password' }, 401);
-	}
-
-	const token = await sign({ id: user.id, username }, secret);
+const refresh = async (hono: Context) => {
+	const payload = hono.get('jwtPayload');
+	const token = await sign({ id: payload.id, username: payload.username }, secret);
 
 	hono.header('Access-Control-Allow-Credentials', 'true');
 	hono.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
@@ -34,8 +22,7 @@ const login = async (hono: Context) => {
 		httpOnly: true,
 	});
 
-	delete user.hash;
-	return hono.json({ user, token });
+	return hono.json({ token });
 };
 
-export default login;
+export default refresh;

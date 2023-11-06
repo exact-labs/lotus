@@ -8,7 +8,19 @@ importers:
 
   .: {}
 
-  ../../services/backend:
+  ../../services/daemon:
+    dependencies:
+      hono:
+        specifier: ~3.9.2
+        version: 3.9.2
+      log4you:
+        specifier: ~0.3.2
+        version: 0.3.2
+      pm2:
+        specifier: ~5.3.0
+        version: 5.3.0
+
+  ../../services/server:
     dependencies:
       '@prisma/client':
         specifier: ~5.5.2
@@ -23,19 +35,7 @@ importers:
         specifier: ~5.5.2
         version: 5.5.2
 
-  ../../services/daemon:
-    dependencies:
-      hono:
-        specifier: ~3.9.2
-        version: 3.9.2
-      log4you:
-        specifier: ~0.3.2
-        version: 0.3.2
-      pm2:
-        specifier: ~5.3.0
-        version: 5.3.0
-
-  ../../services/frontend:
+  ../../services/server/frontend:
     dependencies:
       '@emotion/react':
         specifier: ^11.10.6
