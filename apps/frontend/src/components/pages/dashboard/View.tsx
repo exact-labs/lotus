@@ -235,15 +235,17 @@ const LogViewer = () => {
 	return (
 		<div>
 			{searchOpen && (
-				<input
-					autoFocus
-					tw="block h-full w-full border-0 bg-transparent p-2 text-white focus:ring-0 sm:text-sm"
-					placeholder="Filter logs..."
-					value={searchQuery}
-					onChange={(e) => setSearchQuery(e.target.value)}
-				/>
+				<div tw="z-50 fixed top-56 right-5 w-96 flex bg-gray-800 px-3 py-1 rounded-lg border border-gray-700 shadow">
+					<input
+						tw="grow bg-gray-800 p-2 border-0 text-white focus:ring-0 sm:text-sm"
+						autoFocus
+						placeholder="Filter logs..."
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
+					/>
+					<span tw="grow-0 text-gray-400 font-medium mt-1.5">{searchQuery && filtered.length + ' matches'}</span>
+				</div>
 			)}
-			<p>{searchQuery && filtered.length + ' matches'} </p>
 			<div tw="p-5 break-words overflow-y-scroll font-mono" style={componentStyle}>
 				{filtered.map((log, index) => (
 					<LogRow key={index} match={searchQuery}>
