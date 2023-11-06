@@ -5,7 +5,7 @@ export default async (filePath, pageNumber = 1, linesPerPage = 50) => {
 
 	const file = Bun.file(filePath, 'utf-8');
 	const data = await file.text();
-	const lines = data.split('\n').reverse();
+	const lines = data.trim().split('\n').reverse();
 
 	const startIndex = (pageNumber - 1) * linesPerPage;
 	const endIndex = startIndex + linesPerPage;

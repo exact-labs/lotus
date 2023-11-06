@@ -18,6 +18,7 @@ import {
 
 import Downshift from 'downshift';
 import { matchSorter } from 'match-sorter';
+import daemon from '@/daemon';
 
 const stats = [
 	{ name: 'Status', value: 'online' },
@@ -151,8 +152,6 @@ const logs = [
 	'15:53:47.233 [INFO ] c.w.c.p.ansible.RunPlaybookTask2 - ANSIBLE: deprecation_warnings=False in ansible.cfg.',
 ];
 
-const statuses = { Completed: 'text-green-400 bg-green-400/10', Error: 'text-rose-400 bg-rose-400/10' };
-
 const LogRow = ({ match, children }: any) => {
 	const _match = match.toLowerCase();
 	const chunks = match.length ? children.split(new RegExp('(' + match + ')', 'ig')) : [children];
@@ -230,8 +229,6 @@ const LogViewer = () => {
 		};
 	}, [searchOpen]);
 
-	console.log(componentStyle);
-
 	return (
 		<div>
 			{searchOpen && (
@@ -259,6 +256,10 @@ const LogViewer = () => {
 
 const View = () => {
 	const { id } = useParams();
+
+	useEffect(() => {
+		daemon.logs.out().then((data) => console.log(data));
+	}, []);
 
 	return (
 		<Fragment>

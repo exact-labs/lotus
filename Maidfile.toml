@@ -1,8 +1,13 @@
+[env]
+DATABASE_URL="file:./dev.db"
+
 [project]
 name = "ecosystem"
 version = "0.1.0"
 
 [tasks]
 # add maid task groups
-run_daemon = { path = "services/daemon", script = "bun run src/daemon.ts" }
-run_frontend = { path = "apps/frontend", script = "bunx vite --clearScreen false" }
+daemon = { path = "services/daemon", script = "bun run src/daemon.ts" }
+backend = { path = "services/backend", script = "bun run src/backend.ts" }
+migrate = { path = "services/backend", script = "bunx prisma migrate dev --name dev" }
+frontend = { path = "services/frontend", script = "bunx vite --clearScreen false" }

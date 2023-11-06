@@ -1,5 +1,6 @@
 import log from './logger';
 import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 import pm2, { logs } from './pm2';
 import { logger } from './middleware';
 import { bearerAuth } from 'hono/bearer-auth';
@@ -10,17 +11,17 @@ const app = new Hono();
 const token = 'test_token';
 const port = 9001;
 
-app.use('/d/*', bearerAuth({ token }));
+app.use('*', bearerAuth({ token }));
 app.use('*', logger());
+app.use('*', cors());
 
 /* routes */
-app.get('/', (ctx) => ctx.redirect('/health'));
-app.get('/health', (ctx) => ctx.json({ healthly: true }));
-app.get('/d/list', (hono) => pm2.list(hono));
-app.get('/d/info/:id', (hono) => pm2.info(hono));
-app.get('/d/action/:cmd/:id', (hono) => pm2.action(hono));
+app.get('/metrics', (ctx) => ctx.json({ notice: 'put metrics page here' }));
+app.get('/list', (hono) => pm2.list(hono));
+app.get('/info/:id', (hono) => pm2.info(hono));
+app.get('/action/:cmd/:id', (hono) => pm2.action(hono));
 
-app.get('/d/logs/:id', (hono) => {
+app.get('/logs/:id', (hono) => {
 	const id = hono.req.param('id');
 	const type = hono.req.query('type');
 	const page = parseInt(hono.req.query('page'));

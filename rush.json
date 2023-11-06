@@ -19,7 +19,7 @@
 	"projects": [
 		{
 			"packageName": "@ecosystem/frontend",
-			"projectFolder": "apps/frontend"
+			"projectFolder": "services/frontend"
 		},
 		{
 			"packageName": "@ecosystem/backend",

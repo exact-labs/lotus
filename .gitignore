@@ -77,3 +77,4 @@ common/autoinstallers/*/.npmrc
 
 # vite
 dist
+dev.db
