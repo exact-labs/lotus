@@ -23,9 +23,10 @@ app.get('/d/action/:cmd/:id', (hono) => pm2.action(hono));
 app.get('/d/logs/:id', (hono) => {
 	const id = hono.req.param('id');
 	const type = hono.req.query('type');
+	const page = parseInt(hono.req.query('page'));
 
 	return pm2.raw(id).then((json) => {
-		return logs(type == 'error' ? json.pm2.log.err : json.pm2.log.out).then((data) => hono.json(data));
+		return logs(type == 'error' ? json.pm2.log.err : json.pm2.log.out, page).then((data) => hono.json(data));
 	});
 });
 
