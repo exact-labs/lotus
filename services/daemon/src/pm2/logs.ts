@@ -1,4 +1,4 @@
-export default async (filePath, pageNumber = 1, linesPerPage = 50) => {
+export default async (filePath, pageNumber, linesPerPage = 50) => {
 	if (!filePath || linesPerPage < 1 || isNaN(linesPerPage) || pageNumber < 1) {
 		return { lines: [], nextPage: null, linesPerPage };
 	}

@@ -5,24 +5,24 @@ import { sign } from 'hono/jwt';
 
 /* read from config.toml */
 const secret = 'it-is-very-secret';
+const prisma = new PrismaClient({ datasources: { db: { url: 'file:./dev.db' } } });
 
 const refresh = async (hono: Context) => {
 	const payload = hono.get('jwtPayload');
-	const token = await sign({ id: payload.id, username: payload.username }, secret);
-
-	hono.header('Access-Control-Allow-Credentials', 'true');
-	hono.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-	hono.header('Access-Control-Allow-Headers', '*');
-	// hono.header('Access-Control-Allow-Origin', hono.env.CLIENT_ORIGIN_URL);
+	const token = await sign({ id: payload.id, email: payload.email }, secret);
+	const expires = new Date(new Date().setDate(new Date().getDate() + 7));
+	const user = await prisma.users.findUnique({ where: { email: payload.email } });
 
 	setCookie(hono, 'token', token, {
-		expires: new Date(new Date().setDate(new Date().getDate() + 7)),
+		expires,
+		path: '/',
 		secure: true,
 		sameSite: 'None',
 		httpOnly: true,
 	});
 
-	return hono.json({ token });
+	delete user.hash;
+	return hono.json({ user, token, expires });
 };
 
 export default refresh;

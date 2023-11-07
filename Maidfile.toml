@@ -9,5 +9,9 @@ version = "0.1.0"
 # add maid task groups
 daemon = { path = "services/daemon", script = "bun run src/daemon.ts" }
 migrate = { path = "services/server", script = "bunx prisma migrate dev --name dev" }
-server = { path = "services/server/backend", script = ["rush build", "bun run server.ts"] }
 frontend = { path = "services/server/frontend", script = "bunx vite --clearScreen false" }
+
+
+[tasks.server]
+path = "services/server/backend"
+script = "concurrently 'bun run server.ts' 'rush build:watch -o @ecosystem/frontend'"

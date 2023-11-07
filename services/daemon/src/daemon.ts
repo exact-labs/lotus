@@ -16,7 +16,7 @@ app.use('*', logger());
 app.use('*', cors());
 
 /* routes */
-app.get('/metrics', (ctx) => ctx.json({ notice: 'put metrics page here' }));
+app.get('/metrics', (ctx) => ctx.json({ online: true }));
 app.get('/list', (hono) => pm2.list(hono));
 app.get('/info/:id', (hono) => pm2.info(hono));
 app.get('/action/:cmd/:id', (hono) => pm2.action(hono));

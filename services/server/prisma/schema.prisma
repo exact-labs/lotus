@@ -10,6 +10,7 @@ datasource db {
 model Users {
   id       Int      @id @default(autoincrement())
   username String   @unique
+  email    String   @unique
   hash     String
   servers  Server[]
 }
@@ -17,7 +18,7 @@ model Users {
 model Server {
   id      Int    @id @default(autoincrement())
   name    String
-  address String
+  address String @unique
   token   String
   Users   Users? @relation(fields: [usersId], references: [id])
   usersId Int?

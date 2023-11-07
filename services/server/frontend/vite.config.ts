@@ -6,7 +6,7 @@ import checker from 'vite-plugin-checker';
 import removeConsole from 'vite-plugin-remove-console';
 import { ReactConfig, BannerMessage, RenderChunks, dependencies } from './vite.ext';
 
-const ConsolePlugin = removeConsole();
+const ConsolePlugin = process.env.NODE_ENV == 'production' ? removeConsole() : {};
 const ReactPlugin = react(ReactConfig);
 const BannerPlugin = banner(BannerMessage);
 const CheckerPlugin = checker({ typescript: true });

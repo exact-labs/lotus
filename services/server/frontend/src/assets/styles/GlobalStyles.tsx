@@ -10,7 +10,7 @@ const customStyles = css({
 		...tw`antialiased h-full overscroll-none`,
 	},
 	html: {
-		...tw`h-full bg-gray-900`,
+		...tw`h-full bg-zinc-950`,
 	},
 });
 

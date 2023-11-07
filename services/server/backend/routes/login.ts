@@ -12,23 +12,18 @@ const login = async (hono: Context) => {
 		datasources: { db: { url: 'file:./dev.db' } },
 	});
 
-	const { username, password } = await hono.req.json();
-	const user = await prisma.users.findUnique({ where: { username } });
+	const { email, password } = await hono.req.json();
+	const user = await prisma.users.findUnique({ where: { email } });
 	const expires = new Date(new Date().setDate(new Date().getDate() + 7));
 
 	if (!user || !(await Bun.password.verify(password, user.hash))) {
-		return hono.json({ error: !user ? 'invalid username' : 'invalid password' }, 401);
+		return hono.json({ error: !user ? 'invalid email' : 'invalid password' }, 401);
 	}
 
-	const token = await sign({ id: user.id, username }, secret);
-
-	hono.header('Access-Control-Allow-Credentials', 'true');
-	hono.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-	hono.header('Access-Control-Allow-Headers', '*');
-	// hono.header('Access-Control-Allow-Origin', hono.env.CLIENT_ORIGIN_URL);
-
+	const token = await sign({ id: user.id, email }, secret);
 	setCookie(hono, 'token', token, {
 		expires,
+		path: '/',
 		secure: true,
 		sameSite: 'None',
 		httpOnly: true,

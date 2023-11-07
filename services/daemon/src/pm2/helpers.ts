@@ -1,10 +1,11 @@
 import pm2 from 'pm2';
+import git from '../git';
 import log from '../logger';
 
 const bytesToSize = (bytes, precision) => {
-	if (isNaN(bytes) || bytes === 0) return '0b';
+	if (isNaN(bytes) || bytes === 0) return '0 b';
 
-	const sizes = ['b', 'kb', 'mb', 'gb', 'tb'];
+	const sizes = [' b', ' kb', ' mb', ' gb', ' tb'];
 	const kilobyte = 1024;
 
 	const index = Math.floor(Math.log(bytes) / Math.log(kilobyte));
@@ -29,7 +30,7 @@ const timeSince = (date) => {
 		const interval = Math.floor(elapsedMilliseconds / 1000 / seconds);
 
 		if (interval >= 1) {
-			return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+			return `${interval} ${unit}${interval > 1 ? 's' : ''}`;
 		}
 	}
 
@@ -50,7 +51,10 @@ const actions = {
 
 		return result;
 	},
-	info: (service) => {
+	info: async (service) => {
+		const branch = await git('rev-parse --abbrev-ref HEAD', service.pm2_env.pm_cwd);
+		const commit = await git('rev-parse --short HEAD', service.pm2_env.pm_cwd);
+
 		return {
 			name: service.name,
 			status: service.pm2_env.status,
@@ -62,6 +66,10 @@ const actions = {
 			uptime: {
 				raw: service.pm2_env.pm_uptime,
 				formatted: timeSince(service.pm2_env.pm_uptime),
+			},
+			git: {
+				branch,
+				commit,
 			},
 			pm2: {
 				id: service.pm_id,

@@ -29,14 +29,19 @@ const raw = async (id) => {
 const info = async (hono) => {
 	const id = hono.req.param('id');
 	const services = await actions.cmd('describe', id);
-	return Array.isArray(services) && services.length > 0 ? hono.json(actions.info(services[0])) : hono.json({ error: 404 }, 404);
+	const info = await actions.info(services[0]);
+	return Array.isArray(services) && services.length > 0 ? hono.json(info) : hono.json({ error: 404 }, 404);
 };
 
 const action = async (hono) => {
 	const cmd = hono.req.param('cmd');
 	const id = hono.req.param('id');
+	const extra = hono.req.query('extra').split('=');
+
 	return ['reload', 'stop', 'restart', 'delete'].includes(cmd)
 		? actions.execute(cmd, id).then((data) => hono.json(data))
+		: cmd == 'rename'
+		? actions.execute('reload', id, { [extra[0]]: extra[1] }).then((data) => hono.json(data))
 		: hono.json({ error: 404 }, 404);
 };
 

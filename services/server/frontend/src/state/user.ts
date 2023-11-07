@@ -1,18 +1,13 @@
 import { Action, action, Thunk, thunk } from 'easy-peasy';
 
-let initialState = { uuid: '', token: '', username: '', email: '', profile: { id: '', avatar: '', firstname: '', lastname: '' } };
-
 export interface UserData {
-	uuid: string;
-	token: string;
-	username: string;
-	email: string;
-	profile: {
-		id: string;
-		avatar: string;
-		firstname: string;
-		lastname: string;
+	user: {
+		id: number;
+		username: string;
+		email: string;
 	};
+	token: string;
+	expires: string;
 }
 
 export interface UserStore {
@@ -27,7 +22,7 @@ const user: UserStore = {
 		state.data = payload;
 	}),
 	reset: action((state) => {
-		state.data = initialState;
+		state.data = undefined;
 	}),
 };
 

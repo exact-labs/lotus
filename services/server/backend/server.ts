@@ -7,7 +7,10 @@ import pm2, { logs } from './pm2';
 // migrate to library
 import { logger } from './middleware';
 import { jwt } from 'hono/jwt';
+
 import routes from './routes';
+import daemon from './daemon';
+import settings from './settings';
 
 const app = new Hono();
 
@@ -15,58 +18,53 @@ const app = new Hono();
 const secret = 'it-is-very-secret';
 const port = 9002;
 
-app.use('*', logger());
+app.use('*', cors());
+app.use('/api/*', logger());
+
+/* jwt */
+app.use('/api/settings/*', await jwt({ cookie: 'token', secret }));
 app.use('/api/daemon/*', await jwt({ cookie: 'token', secret }));
 app.use('/api/refresh', await jwt({ cookie: 'token', secret }));
-
-/* spa */
-app.use('/assets/*', serveStatic({ root: '../frontend/dist' }));
-app.use('/*', serveStatic({ root: '../frontend/dist', path: 'index.html' }));
+app.use('/api/metrics', await jwt({ cookie: 'token', secret }));
 
 /* auth */
 app.post('/api/login', (hono) => routes.login(hono));
 app.post('/api/logout', (hono) => routes.logout(hono));
 app.get('/api/refresh', (hono) => routes.refresh(hono));
 
+/* settings */
+app.post('/api/settings/daemon/add', (hono) => settings.add(hono));
+app.post('/api/settings/daemon/rename', (hono) => hono.text('rename'));
+app.post('/api/settings/daemon/remove', (hono) => hono.text('remove'));
+
 /* daemon */
-app.get('/api/daemon/:server/overview', (hono) => hono.text('overview'));
-app.get('/api/daemon/:server/info/:id', (hono) => hono.text('info'));
-app.post('/api/daemon/:server/logs', (hono) => hono.text('logs'));
-app.post('/api/daemon/:server/action', (hono) => hono.text('action'));
+app.get('/api/daemon/list', (hono) => daemon.list(hono));
+app.get('/api/daemon/:server/services', (hono) => daemon.services(hono));
+app.get('/api/daemon/:server/overview', (hono) => daemon.overview(hono));
+app.get('/api/daemon/:server/info/:id', (hono) => daemon.info(hono));
+app.post('/api/daemon/:server/logs', (hono) => daemon.logs(hono));
+app.post('/api/daemon/:server/action', (hono) => daemon.action(hono));
 
+/* general api */
+app.get('/api/metrics', (hono) => hono.text('metrics'));
 app.post('/api/setup', async (hono): Promise<Response> => {
-	const prisma = new PrismaClient({
-		datasources: { db: { url: 'file:./dev.db' } },
-	});
-
+	const prisma = new PrismaClient({ datasources: { db: { url: 'file:./dev.db' } } });
 	const existingUser = await prisma.users.findFirst();
 
 	if (existingUser) {
-		return hono.json({ message: 'Setup is already complete. A user exists.' });
+		return hono.json({ success: false, message: 'Setup is already complete.' }, 403);
 	}
 
-	const { username, password } = await hono.req.json();
+	const { email, username, password } = await hono.req.json();
 	const hash = await Bun.password.hash(password);
+	const user = await prisma.users.create({ data: { email, username, hash } });
 
-	const user = await prisma.users.create({
-		data: {
-			username,
-			hash,
-		},
-	});
-
-	return hono.json({ data: user });
+	return hono.json({ success: true });
 });
 
-app.onError((err, hono) => {
-	hono.status(500);
-
-	return hono.json({
-		success: false,
-		message: err.message,
-		data: null,
-	});
-});
+/* spa */
+app.use('/assets/*', serveStatic({ root: '../frontend/dist' }));
+app.use('/*', serveStatic({ root: '../frontend/dist', path: 'index.html' }));
 
 log.g('startup').success('running on port:', port);
 export default {

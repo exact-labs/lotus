@@ -4,6 +4,7 @@ import { setCookie } from 'hono/cookie';
 const logout = async (hono: Context) => {
 	setCookie(hono, 'token', '', {
 		expires: new Date(0),
+		path: '/',
 		secure: true,
 		sameSite: 'None',
 		httpOnly: true,
