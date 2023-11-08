@@ -41,14 +41,12 @@ const actions = {
 	cmd: (name, ...args) => new Promise((resolve, reject) => pm2[name](...args, (err, result) => (err ? reject(err) : resolve(result)))),
 	execute: async (operation, ...args) => {
 		await actions.cmd('connect');
-		log.g('pm2').trace('connected to api');
-
 		const result = await actions.cmd(operation, ...args);
-		log.g('pm2').trace(`action [${operation}] executed`);
-
 		await actions.cmd('disconnect');
-		log.g('pm2').trace('disconnected from api');
-
+		return result;
+	},
+	executeRaw: async (operation, ...args) => {
+		const result = await actions.cmd(operation, ...args);
 		return result;
 	},
 	info: async (service) => {

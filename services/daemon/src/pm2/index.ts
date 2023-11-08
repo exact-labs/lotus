@@ -36,7 +36,7 @@ const info = async (hono) => {
 const action = async (hono) => {
 	const cmd = hono.req.param('cmd');
 	const id = hono.req.param('id');
-	const extra = hono.req.query('extra').split('=');
+	const extra = hono.req.query('extra')?.split('=');
 
 	return ['reload', 'stop', 'restart', 'delete'].includes(cmd)
 		? actions.execute(cmd, id).then((data) => hono.json(data))

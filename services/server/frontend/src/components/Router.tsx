@@ -6,6 +6,7 @@ import { Navigate, BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { Login } from '@/components/pages';
 import { store, ApplicationStore } from '@/state';
+import { Server } from '@/components/pages/servers';
 import { Services, Processes, View } from '@/components/pages/dashboard';
 import { Navigation } from '@/components/elements/dashboard';
 import { Spinner } from '@/components/elements/generic';
@@ -39,6 +40,7 @@ const Router = () => {
 				<Route path="/services" element={<Navigation title="Dashboard - Services" element={<Services />} />} />
 				<Route path="/services/processes" element={<Navigation title="Dashboard - Processes" element={<Processes />} />} />
 				<Route path="/services/view/:id" element={<Navigation title="Dashboard - View" element={<View />} />} />
+				<Route path="/server/:id" element={<Navigation title="Dashboard - Server" element={<Server />} />} />
 				<Route path="/login" element={<Navigate replace to="/services" />} />
 			</Routes>
 		);

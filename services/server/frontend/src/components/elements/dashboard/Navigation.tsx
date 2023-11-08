@@ -112,6 +112,7 @@ const Navigation = (props: { title: string; element: any }) => {
 																css={[
 																	server.status == 'online' ? tw`text-zinc-400` : tw`text-zinc-600`,
 																	tw`hover:bg-zinc-800 flex gap-x-2 rounded-md p-1.5 text-sm leading-6 font-semibold`,
+																	onPage(`/server/${server.id}`) && tw`bg-zinc-800 text-white`,
 																]}>
 																<span
 																	css={[
@@ -183,14 +184,15 @@ const Navigation = (props: { title: string; element: any }) => {
 												css={[
 													server.status == 'online' ? tw`text-zinc-400` : tw`text-zinc-600`,
 													tw`hover:bg-zinc-800 flex gap-x-2 rounded-md p-1.5 text-sm leading-6 font-semibold`,
+													onPage(`/server/${server.id}`) && tw`bg-zinc-800 text-white`,
 												]}>
 												<span
 													css={[
 														server.status == 'online' ? tw`text-green-400 border-green-800 bg-zinc-800` : tw`text-red-300 border-red-600 bg-red-900`,
-														tw`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[0.625rem] font-medium`,
+														tw`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border text-[0.625rem] font-medium`,
 													]}>
 													{server.status == 'online' ? (
-														<CheckIcon tw="h-3 w-3 shrink-0" aria-hidden="true" />
+														<CheckIcon tw="h-3 w-3 shrink-0 [stroke:4px]" aria-hidden="true" />
 													) : (
 														<XIconMini tw="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
 													)}
